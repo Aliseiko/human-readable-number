@@ -1,33 +1,23 @@
 module.exports = function toReadable(number) {
-    const matrixToTwenty = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'],
-        matrixTens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+    const matrixToTwenty = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
+        'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
 
-    const unit = Number(String(number).split('').reverse()[0]),
-        tens = Number(String(number).split('').reverse()[1]) || 0,
-        hundreds = Number(String(number).split('').reverse()[2]) || 0;
+    if (number < 20) return matrixToTwenty[number];
 
-    let unitText = '',
-        tensText = '',
-        hundredsText = '';
+    const matrixTens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
 
-    if (number == 0) {
-        return matrixToTwenty[number];
-    }
-    if (tens < 2 && unit != 0) {
-        unitText = ` ${matrixToTwenty[tens * 10 + unit]}`;
-    } else if (tens >= 2 && unit != 0) {
+    const [unit, tens = 0, hundreds = 0] = number.toString().split('').reverse().map(el => +el);
+
+    let unitText = '';
+    const less100 = (tens * 10 + unit);
+    if (0 < less100 && less100 < 20) {
+        unitText = ` ${matrixToTwenty[less100]}`;
+    } else if (unit) {
         unitText = ` ${matrixToTwenty[unit]}`;
-    } else if (tens == 1 && unit == 0) {
-        unitText = ' ten';
     }
 
-    if (tens >= 2) {
-        tensText = ` ${matrixTens[tens]}`;
-    }
+    const tensText = (tens >= 2) ? ` ${matrixTens[tens]}` : '';
+    const hundredsText = (hundreds) ? matrixToTwenty[hundreds] + ' hundred' : '';
 
-    if (hundreds > 0) {
-        hundredsText = matrixToTwenty[hundreds] + ' hundred';
-    }
-
-    return (hundredsText + tensText + unitText).trim()
+    return (hundredsText + tensText + unitText).trim();
 }
